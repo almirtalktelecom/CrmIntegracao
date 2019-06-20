@@ -5,40 +5,62 @@ namespace AtendimentoManager
 {
     public class TcpClientQt : IDisposable
     {
-        private readonly IntPtr pClassName;
+        private readonly IntPtr pTcpClient;
 
-        [DllImport(@"NovaLib.dll", CallingConvention = CallingConvention.Cdecl)]
+        private readonly IntPtr pMyThread;
+
+        [DllImport(@"D:\Fontes\QT\Teste\lib\build-NovaLib-Desktop_Qt_5_12_2_MSVC2017_64bit-Release\release\NovaLib.dll", CallingConvention = CallingConvention.Cdecl)]
         static private extern IntPtr CreateTcpClient();
+        
+        [DllImport(@"D:\Fontes\QT\Teste\lib\build-NovaLib-Desktop_Qt_5_12_2_MSVC2017_64bit-Release\release\NovaLib.dll", CallingConvention = CallingConvention.Cdecl)]
+        static private extern IntPtr CreateMyThread();
 
-        [DllImport(@"NovaLib.dll", CallingConvention = CallingConvention.Cdecl)]
-        static private extern void Open(IntPtr pAtendimentoObject,string servidor, int porta);
+        [DllImport(@"D:\Fontes\QT\Teste\lib\build-NovaLib-Desktop_Qt_5_12_2_MSVC2017_64bit-Release\release\NovaLib.dll", CallingConvention = CallingConvention.Cdecl)]
+        static private extern void InitClient(IntPtr pMyThreadObj, int porta, string servidor);
 
-        [DllImport(@"NovaLib.dll", CallingConvention = CallingConvention.Cdecl)]
-        static private extern void Send(IntPtr pAtendimentoObject, int len, string p);
+        [DllImport(@"D:\Fontes\QT\Teste\lib\build-NovaLib-Desktop_Qt_5_12_2_MSVC2017_64bit-Release\release\NovaLib.dll", CallingConvention = CallingConvention.Cdecl)]
+        static private extern void InitClientExt(IntPtr pClassName, int porta, string servidor);
 
-        [DllImport(@"NovaLib.dll", CallingConvention = CallingConvention.Cdecl)]
-        static private extern IntPtr ReadData(IntPtr pAtendimentoObject);
+        [DllImport(@"D:\Fontes\QT\Teste\lib\build-NovaLib-Desktop_Qt_5_12_2_MSVC2017_64bit-Release\release\NovaLib.dll", CallingConvention = CallingConvention.Cdecl)]
+        static private extern void SendExt(IntPtr pMyThreadObj, int len, string p);
+
+        [DllImport(@"D:\Fontes\QT\Teste\lib\build-NovaLib-Desktop_Qt_5_12_2_MSVC2017_64bit-Release\release\NovaLib.dll", CallingConvention = CallingConvention.Cdecl)]
+        static private extern void Send(IntPtr pClassName, int len, string p);
+
+        [DllImport(@"D:\Fontes\QT\Teste\lib\build-NovaLib-Desktop_Qt_5_12_2_MSVC2017_64bit-Release\release\NovaLib.dll", CallingConvention = CallingConvention.Cdecl)]
+        static private extern void SetPacote(IntPtr pClassName, int len, string p);
 
         public TcpClientQt()
         {
-            pClassName = CreateTcpClient();
-        }
-
-        public void Open(string servidor, int porta)
-        {
-            Open(pClassName, servidor, porta);
+            pTcpClient = CreateTcpClient();
+            pMyThread = CreateMyThread();
         }
 
         public void Send(int len, string p)
         {
-            Send(pClassName, len, p);
+            Send(pTcpClient, len, p);
         }
 
-        public void ReadData()
+        public void SetPacote(int len, string p)
         {
-            ReadData(pClassName);
+            SetPacote(pTcpClient, len, p);
         }
 
+        public void SendExt(int len, string p)
+        {
+            SendExt(pMyThread, len, p);
+        }
+
+        public void InitClientExt(int porta, string servidor)
+        {
+            InitClientExt(pTcpClient, porta, servidor);
+        }
+
+        public void InitClient(int porta, string servidor)
+        {
+            InitClient(pMyThread, porta, servidor);
+        }
+        
         public void Dispose()
         {
             throw new NotImplementedException();
