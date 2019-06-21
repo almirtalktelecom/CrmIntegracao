@@ -1,4 +1,4 @@
-﻿#define VERSAO_29
+﻿#define VERSAO_36
 
 using AtendimentoManager;
 using System;
@@ -21,7 +21,7 @@ namespace ConsoleApp
         {
             var obj = new TcpClientQt();
             var task = Task.Run(() => WorkExt(obj));
-            obj.InitClientExt(44900, "172.16.5.239");
+            obj.InitClient(44900, "172.16.5.239");
         }
 
         static int WorkExt(TcpClientQt obj)
@@ -38,43 +38,12 @@ namespace ConsoleApp
                     default:
                         var s = c.KeyChar.ToString() + Console.ReadLine();
                         s += "\r\n";
-                        obj.SetPacote(s.Length, s);
+                        obj.SetPacoteExt(s.Length, s);
                         break;
                 }
             }
         }
 
         #endregion TcpClient
-
-        #region MyThread
-
-        static void InitClient()
-        {
-            var obj = new TcpClientQt();
-            var task = Task.Run(() => Work(obj));
-            obj.InitClient(44900, "172.16.5.239");
-        }
-
-        static int Work(TcpClientQt obj)
-        {
-            for (; ; )
-            {
-                var c = Console.ReadKey();
-                switch (c.Key)
-                {
-                    case ConsoleKey.Escape:
-                        System.Environment.Exit(0);
-                        break;
-
-                    default:
-                        var s = c.KeyChar.ToString() + Console.ReadLine();
-                        obj.SendExt(s.Length, s);
-                        break;
-                }
-            }
-        }
-
-        #endregion // MyThread
-
     }
 }
