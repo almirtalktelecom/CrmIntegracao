@@ -1,4 +1,4 @@
-﻿#define VERSAO_36
+﻿#define VERSAO_55
 
 using AtendimentoManager;
 using System;
