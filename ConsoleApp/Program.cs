@@ -1,4 +1,4 @@
-﻿#define VERSAO_55
+﻿#define VERSAO_80
 
 using AtendimentoManager;
 using System;
@@ -12,7 +12,6 @@ namespace ConsoleApp
         {
             Console.WriteLine("Esc para quit!");
             InitClientExt();
-            Console.ReadKey();
         }
 
         #region TcpClient
@@ -20,8 +19,16 @@ namespace ConsoleApp
         static void InitClientExt()
         {
             var obj = new TcpClientQt();
+
+            obj.OnConectado += Obj_OnConectado;
+
             var task = Task.Run(() => WorkExt(obj));
-            obj.InitClient(44900, "172.16.5.239");
+            obj.InitClientExt(44900, "172.16.5.239");
+        }
+
+        private static void Obj_OnConectado(object sender, EventArgs e)
+        {
+            Console.WriteLine("Obj_OnConectado!");
         }
 
         static int WorkExt(TcpClientQt obj)
@@ -32,13 +39,13 @@ namespace ConsoleApp
                 switch (c.Key)
                 {
                     case ConsoleKey.Escape:
-                        System.Environment.Exit(0);
-                        break;
+                        obj.FinalizaClientExt();
+                        return 0;
 
                     default:
                         var s = c.KeyChar.ToString() + Console.ReadLine();
                         s += "\r\n";
-                        obj.SetPacoteExt(s.Length, s);
+                        obj.EnviaPacoteExt(s.Length, s);
                         break;
                 }
             }
